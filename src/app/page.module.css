@@ -160,7 +160,7 @@
   width: calc(100% + 12vw);
   min-height: calc(100svh - 84px);
   margin-left: -12vw;
-  background-image: linear-gradient(90deg, rgba(237, 240, 244, 0.35), rgba(237, 240, 244, 0)), url("/images/avera-hero-frosted-silhouette.webp");
+  background-image: linear-gradient(90deg, rgba(237, 240, 244, 0.35), rgba(237, 240, 244, 0)), url("/images/trappedgirl.jpg");
   background-position: 58% center;
   background-size: cover;
   filter: grayscale(1);
@@ -594,7 +594,7 @@
 
 .dossierImage {
   min-height: 190px;
-  background-image: url("/images/avera-hero-frosted-silhouette.webp");
+  background-image: url("/images/trappedgirl.jpg");
   background-size: cover;
   filter: grayscale(1);
 }
