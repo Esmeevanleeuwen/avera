@@ -172,9 +172,9 @@
   margin-left: -12vw;
   pointer-events: none;
   /* The second layer keeps the header visible until trappedgirl.jpg is committed. */
-  background-image: linear-gradient(90deg, rgba(237, 240, 244, 0.35), rgba(237, 240, 244, 0)), url("/images/trappedgirl.jpg"), url("/images/avera-hero-frosted-silhouette.webp");
-  background-position: 58% center, center;
-  background-size: cover;
+  background-image: url("/images/trappedgirl.jpg");
+  background-position: 58% center;
+  background-size: auto 90%;
   background-repeat: no-repeat;
   filter: grayscale(1);
   mix-blend-mode: multiply;
@@ -186,7 +186,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, var(--hero-paper), transparent 15%);
+  background:
+    linear-gradient(90deg, transparent 54%, var(--hero-paper) 100%),
+    linear-gradient(180deg, var(--hero-paper), transparent 15%);
 }
 
 .impactBar {
@@ -925,6 +927,7 @@
     width: 100%;
     margin-bottom: -28px;
     background-position: 50% 40%;
+    background-size: cover;
     -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent 100%);
     mask-image: linear-gradient(180deg, #000 40%, transparent 100%);
   }
