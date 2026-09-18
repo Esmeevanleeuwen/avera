@@ -1,0 +1,26 @@
+name: Shared Avera publishing checks
+on:
+  push:
+    branches: [main, feature/shared-publishing-20260918]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/publishing-links.test.mjs
+      - run: npm run lint
+      - run: npm run build
