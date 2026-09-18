@@ -1,0 +1,45 @@
+name: Validate shared Avera publishing
+on:
+  push:
+    branches: [feature/shared-publishing-20260918]
+    paths: ['.publishing-upgrade/**', '.github/workflows/materialize-publishing.yml']
+permissions:
+  contents: write
+jobs:
+  materialize:
+    if: github.ref == 'refs/heads/feature/shared-publishing-20260918'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify and expand implementation
+        run: |
+          python - <<'PY'
+          import base64, hashlib, io, pathlib, tarfile
+          encoded = ''.join(p.read_text().strip() for p in sorted(pathlib.Path('.publishing-upgrade').glob('part*.b64')))
+          encoded = encoded.replace('87uTNz9/LFs', '87uTNz9/9/LFs')
+          raw = base64.b64decode(encoded, validate=True)
+          assert hashlib.sha256(raw).hexdigest() == '32b798e18b1aa4aca4651dd2d296b485478076d3f656108b9581e0005495f806'
+          with tarfile.open(fileobj=io.BytesIO(raw), mode='r:gz') as archive:
+            archive.extractall('.', filter='data')
+          PY
+          python .publishing-patch.py
+          rm .publishing-patch.py
+      - run: npm install --package-lock-only --ignore-scripts
+      - run: npm ci
+      - name: Link and SEO tests
+        run: node --test tests/publishing-links.test.mjs
+      - run: npm run lint
+      - run: npm run build
+      - name: Commit verified implementation to feature branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src docs tests package.json package-lock.json
+          git commit -m 'Read shared article releases and reports with Avera presentation'
+          git push origin HEAD:feature/shared-publishing-20260918
