@@ -1,3 +1,4 @@
+import { AveraStories, AveraHero } from "@/components/publishing/AveraFeed";
 import {
   ArrowRight,
   LockKeyhole,
@@ -7,7 +8,7 @@ import {
 import { getHomepageContent } from "@/lib/homepage";
 import styles from "./page.module.css";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 const c = (...names: Array<string | false | null | undefined>) =>
   names
@@ -69,7 +70,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className={c("hero")} id="investigations">
+      <AveraHero fallback={<section className={c("hero")} id="investigations">
         <div className={c("heroCopy")}>
           <p className={c("eyebrow")}>Onderzoek — Phosphoros</p>
           <span className={c("accentRule")} aria-hidden="true" />
@@ -80,7 +81,7 @@ export default async function Home() {
           <ArrowLink href="#stories">Lees het onderzoek</ArrowLink>
         </div>
         <div className={c("heroImage")} role="img" aria-label="Vage menselijke silhouet achter matglas" />
-      </section>
+      </section>} />
 
       <section className={c("impactBar")} aria-label="Impact in cijfers">
         <p className={c("impactStatement")}>Seksueel misbruik is geen incident.<br />Het is een structuur die door<br />stilte blijft bestaan.</p>
@@ -109,7 +110,7 @@ export default async function Home() {
 
       <section className={c("storiesSection")} id="stories">
         <div className={c("sectionKicker")}><span>01</span><i />Uitgelichte verhalen<b /></div>
-        <div className={c("storiesGrid")}>
+        <AveraStories fallback={<div className={c("storiesGrid")}>
           <article className={c("storyFeature")}>
             <div className={c("storyImage featureImage")} />
             <div className={c("storyOverlay")}>
@@ -139,7 +140,7 @@ export default async function Home() {
               </div>
             </article>
           </div>
-        </div>
+        </div>} />
       </section>
 
       <section className={c("voicesSection")} id="voices">
