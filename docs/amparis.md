@@ -1,37 +1,28 @@
 # Amparis — naam en domein
 
-Avera heet voortaan **Amparis**. Het woordmerk is **AMPARIS** en de ondertitel is **The Amparis Collective**. De homepage, footer, toegankelijke merklabels, artikellijst en uitgeversnaam in JSON-LD gebruiken de nieuwe naam.
+Avera heet **Amparis**. Het woordmerk is **AMPARIS** en de ondertitel is **The Amparis Collective**. De homepage, footer, toegankelijke merklabels, artikellijst en uitgeversnaam in JSON-LD gebruiken deze naam.
 
-## Gedeelde artikelen behouden
+## Eén publicatiekanaal
 
-De platformsleutel in de database en API blijft `avera`. De naamswijziging maakt geen nieuw publicatiekanaal, kopieert geen artikelen en verandert geen hoofdstuk-ID's, verslagen, revisies of toegangsrechten. Meridian toont voor dit kanaal het label Amparis. Bestaande functies, tabelnamen, afbeeldingspaden en de repositorynaam mogen daarom nog `avera` bevatten.
+De platformsleutel blijft `avera`. De naamswijziging maakt geen nieuw kanaal, kopieert geen artikelen en verandert geen hoofdstuk-ID's, revisies of toegangsrechten. De repositorynaam, oudere documentatie en interne bestandsnamen kunnen daarom nog Avera bevatten.
 
-## Bevestigd domein
+## Domeinkoppeling
 
-De eigenaar heeft **amparis.nl** bevestigd met de domeingegevens uit TransIP. Het officiële adres is `https://amparis.nl`, zonder www.
+De eigenaar heeft `amparis.nl` bevestigd. Bij de live-controle op 19 september 2026 verwees Vercel `https://amparis.nl` met HTTP 308 door naar `https://www.amparis.nl`. De bestaande hosting-doorverwijzing wordt behouden; het primaire publicatieadres is daarom `https://www.amparis.nl`. Dit is dezelfde website, geen extra publicatiekanaal.
 
-In de gedeelde database is `publishing_sites.origin` voor de bestaande sleutel `avera` ingesteld op `https://amparis.nl`. Alleen het websiteadres is aangepast. Bestaande artikelinstellingen, verslagen, teksten en toegangsrechten zijn niet gewijzigd. Er is geen artikel gepubliceerd en de eerdere, afzonderlijke database-activatie is hiermee niet uitgevoerd.
-
-`.env.example` bevat nu:
+`publishing_sites.origin` voor `avera` moet dit primaire adres bevatten. Artikelcanonicals en de sitemap gebruiken deze gedeelde instelling. `robots.txt` leest nu dezelfde instelling en valt alleen bij een API-storing terug op de hostingvariabele. Preview-deployments blijven uitgesloten van indexering.
 
 ```env
-NEXT_PUBLIC_SITE_URL=https://amparis.nl
+NEXT_PUBLIC_SITE_URL=https://www.amparis.nl
 SHARED_CONTENT_API_URL=https://meridiancollective.nl/api/publicaties
 ```
 
-Een voorbeeldbestand stelt niet automatisch de Vercel-omgeving in. Voeg `NEXT_PUBLIC_SITE_URL` ook toe in de hostingomgeving. De server-side Meridian-API blijft de gedeelde bron; `SHARED_CONTENT_API_URL` wijst naar die API, niet naar de publieke Amparis-homepage.
+Een voorbeeldbestand verandert geen Vercel-omgevingsvariabelen. De gedeelde database-instelling heeft bij openbare publicaties voorrang. De bestaande Vercel-projectnaam is `avera`; dit project bevat de Amparis-website. Het Meridian-project blijft `perspectief`.
 
-## Hosting en DNS nog koppelen
+## Publicaties
 
-Bij de controle was in het gekoppelde Vercel-team geen Amparis- of Avera-project aanwezig. De bestaande repository `Esmeevanleeuwen/avera` bevat de Amparis-website. Importeer deze als een afzonderlijk Vercel-project, bijvoorbeeld met de projectnaam `amparis`. Gebruik niet het Meridian-project `perspectief` voor dit domein.
+De read-only Meridian-API levert alleen vrijgegeven edities voor dit kanaal. Een leeg artikeloverzicht betekent dat er nog geen artikel bewust voor Amparis is gepubliceerd. Deze domeinkoppeling publiceert geen artikelen en maakt privénotities, ledencontent of interne tags niet openbaar.
 
-Voeg bij dat project onder Settings → Domains `amparis.nl` en `www.amparis.nl` toe. Stel www in als doorverwijzing naar het adres zonder www. Neem de aanbevolen DNS-waarden uit dat Vercel-project exact over in TransIP; waarden kunnen projectspecifiek zijn. Bewaar de TransIP-nameservers en bestaande e-mailrecords. DNSSEC hoeft voor deze DNS-recordmethode niet te worden uitgeschakeld.
+Schrijven gebeurt in Meridian: Werkplek → Structuur & publicatie. Sla de tekst en instellingen op en kies de gewenste websites vóór Publiceer geselecteerde websites. Meer uitleg staat in `docs/shared-publishing.md` in de Meridian-repository.
 
-De aangeleverde TransIP-tekst bevatte geen ingevulde DNS-recordwaarden. Er zijn in deze stap geen DNS-records, domeinredirects, nameservers of hostinginstellingen gewijzigd. Controleer na koppeling de domeinverificatie en HTTPS in Vercel en daarna de homepage, artikelen en sitemap.
-
-Officiële handleidingen:
-- https://vercel.com/docs/domains/working-with-domains/add-a-domain
-- https://vercel.com/docs/domains/set-up-custom-domain
-- https://www.transip.nl/knowledgebase/25-domein-koppelen-aan-externe-webserver
-
-Oudere documentatie met Avera beschrijft hetzelfde platform onder de vorige naam.
+DNS, nameservers, mailrecords en domeinredirects zijn bij deze codeaanpassing niet gewijzigd.
