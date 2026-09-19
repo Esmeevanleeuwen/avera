@@ -1,6 +1,6 @@
-# AVERA
+# AMPARIS
 
-AVERA is een onafhankelijk redactioneel platform voor verhalen, onderzoek en collectieve kennis. Deze repository bevat de zelfstandige Next.js-versie van de bestaande AVERA-landingspagina.
+Amparis is de nieuwe naam van Avera. De website bevat verhalen, onderzoeken en doorlopende verslagen. De naam is aangepast in de homepage, footer, artikelnavigatie, paginatitels en gestructureerde artikelmetadata. De bestaande vormgeving en inhoud blijven behouden.
 
 ## Lokale ontwikkeling
 
@@ -11,23 +11,25 @@ npm run dev
 
 Open daarna `http://localhost:3000`.
 
-## Supabase
+## Supabase en gedeelde artikelen
 
-Kopieer `.env.example` naar `.env.local` en vul de publieke projectwaarden in:
+Kopieer `.env.example` naar `.env.local` en vul zo nodig de publieke projectwaarden in:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 ```
 
-Voer `supabase/avera_homepage.sql` uit in de Supabase SQL Editor. Zonder omgevingsvariabelen gebruikt de homepage dezelfde statische inhoud, zodat lokale builds en previews altijd blijven werken.
+De bestaande homepagegegevens gebruiken `supabase/avera_homepage.sql`. Zonder deze configuratie gebruikt de homepage de bestaande statische inhoud. Gedeelde artikelen en verslagen komen uit de read-only Meridian-API; daarvoor is geen tweede artikelendatabase nodig.
+
+De technische platformsleutel `avera`, bestaande tabelnamen, mediapaden en repositorynaam blijven behouden voor compatibiliteit. Dit zijn geen zichtbare merknamen. Zie `docs/amparis.md` voor de naamswijziging en domeininstelling en `docs/shared-publishing.md` voor het publicatiemodel.
 
 ## Controle
 
 ```bash
 npm run lint
-npx tsc --noEmit
+node --test tests/publishing-links.test.mjs tests/amparis-branding.test.mjs
 npm run build
 ```
 
-Zie `AVERA_TECHNISCHE_DOCUMENTATIE.md` voor architectuur, privacy, gegevensmodel en implementatiekeuzes.
+`AVERA_TECHNISCHE_DOCUMENTATIE.md` beschrijft de oorspronkelijke implementatie onder de vorige naam.

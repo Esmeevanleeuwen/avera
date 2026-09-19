@@ -20,9 +20,9 @@ const c = (...names: Array<string | false | null | undefined>) =>
 
 function Brand({ inverse = false }: { inverse?: boolean }) {
   return (
-    <a className={c("brand", inverse && "brandInverse")} href="#top" aria-label="AVERA homepage">
-      <span className={c("brandName")}>AVERA</span>
-      <span className={c("brandTag")}>The Avera Collective</span>
+    <a className={c("brand", inverse && "brandInverse")} href="#top" aria-label="AMPARIS homepage">
+      <span className={c("brandName")}>AMPARIS</span>
+      <span className={c("brandTag")}>The Amparis Collective</span>
     </a>
   );
 }
@@ -204,11 +204,11 @@ export default async function Home() {
             <div className={c("socials")}><a href="#" aria-label="Instagram">IG</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="X">X</a></div>
           </div>
           <div className={c("footerColumn")}><h3>Ontdek</h3><a href="#stories">Stories</a><a href="#voices">Voices</a><a href="#investigations">Investigations</a><a href="#data">Data</a><a href="#world">World</a></div>
-          <div className={c("footerColumn")}><h3>Over Avera</h3><a href="#about">Over ons</a><a href="#">Ons manifest</a><a href="#">Methodologie</a><a href="#">Veiligheid &amp; privacy</a><a href="#">Veelgestelde vragen</a></div>
+          <div className={c("footerColumn")}><h3>Over Amparis</h3><a href="#about">Over ons</a><a href="#">Ons manifest</a><a href="#">Methodologie</a><a href="#">Veiligheid &amp; privacy</a><a href="#">Veelgestelde vragen</a></div>
           <div className={c("footerColumn")}><h3>Doe mee</h3><a href="#share">Deel je ervaring</a><a href="#world">Word lid</a><a href="#">Steun ons werk</a><a href="#">Partner worden</a></div>
           <div className={c("footerColumn legal")}><h3>Juridisch</h3><a href="#">Privacy</a><a href="#">Gebruiksvoorwaarden</a><a href="#">Cookiebeleid</a><a href="#">Veiligheid</a></div>
         </div>
-        <p className={c("copyright")}>© 2026 AVERA Collective</p>
+        <p className={c("copyright")}>© 2026 AMPARIS Collective</p>
       </footer>
     </main>
   );

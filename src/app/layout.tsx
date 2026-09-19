@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AVERA — The Avera Collective",
+  title: "AMPARIS — The Amparis Collective",
   description:
     "Onafhankelijke verhalen, onderzoek en collectieve data over macht, stilte en herstel.",
   icons: {
