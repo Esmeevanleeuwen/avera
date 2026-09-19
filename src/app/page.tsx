@@ -1,4 +1,5 @@
 import { AveraStories, AveraHero } from "@/components/publishing/AveraFeed";
+import HomepageArticles from "@/components/publishing/HomepageArticles";
 import {
   ArrowRight,
   LockKeyhole,
@@ -37,7 +38,7 @@ function ArrowLink({ children, href = "#" }: { children: React.ReactNode; href?:
 }
 
 export default async function Home() {
-  const { dossiers, metrics, stories } = await getHomepageContent();
+  const { metrics, stories } = await getHomepageContent();
 
   return (
     <main className={c("page")} id="top">
@@ -166,21 +167,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className={c("dossierSection")}>
-        <div className={c("sectionKicker")}><span>03</span><i />Dossiers<b /></div>
-        <div className={c("dossierGrid")}>
-          {dossiers.map((dossier, index) => (
-            <article className={c("dossier")} key={dossier.title}>
-              <div className={c("dossierImage", `dossierImage${index + 1}`)} role="img" aria-label="Abstracte menselijke silhouetten achter matglas" />
-              <div>
-                <h3>{dossier.title}</h3>
-                <p>{dossier.text}</p>
-                <ArrowLink>Lees dossier</ArrowLink>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+      <HomepageArticles />
 
       <section className={c("closingSection")} id="world">
         <div className={c("lighthouseImage")} role="img" aria-label="Vuurtoren op rotsen aan zee" />
