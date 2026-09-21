@@ -1,0 +1,47 @@
+name: Mobile homepage checks
+on:
+  push:
+    branches: [main, fix/amparis-mobile-homepage]
+    paths: ['src/**', 'scripts/check-mobile-homepage.mjs', '.github/workflows/mobile-homepage.yml', 'package*.json']
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  responsive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      MOBILE_AUDIT_ONLY: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/publishing-links.test.mjs tests/amparis-branding.test.mjs tests/homepage-articles.test.mjs
+      - run: npm run lint
+      - run: npm run build
+      - name: Install isolated browser tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/mobile-tools" --no-package-lock playwright@1.63.0
+          "$RUNNER_TEMP/mobile-tools/node_modules/.bin/playwright" install --with-deps chromium webkit
+      - name: Check rendered homepage
+        run: node scripts/check-mobile-homepage.mjs
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/mobile-tools/node_modules/playwright/index.mjs
+      - name: Export source for layout review
+        if: always()
+        run: |
+          mkdir -p mobile-results
+          git archive HEAD | gzip > mobile-results/source.tar.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-homepage
+          path: mobile-results/
+          retention-days: 7
