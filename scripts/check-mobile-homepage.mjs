@@ -41,8 +41,9 @@ try {
     try {
       const sizes = engine === 'chromium' ? [[320, 740], [360, 800], [375, 812], [390, 844], [430, 932], [568, 320], [768, 1024], [850, 900], [900, 900], [1024, 768], [1280, 900], [1440, 1000]] : [[320, 740], [390, 844], [768, 1024]];
       for (const [width, height] of sizes) {
-        const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1, hasTouch: width <= 1024 });
+        const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1, hasTouch: width <= 1024, isMobile: width <= 430 });
         const errors = [];
+        await page.emulateMedia({ reducedMotion: 'reduce' });
         page.on('pageerror', error => errors.push(error.message));
         await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'networkidle' });
         await page.evaluate(() => document.fonts.ready);
@@ -63,9 +64,9 @@ try {
         if (width <= 850) {
           check(layout.heroImage.height <= 470, `${engine} ${width}: mobile hero image still has desktop minimum height`);
           check(layout.heroImage.x >= -1, `${engine} ${width}: mobile hero image still has desktop negative margin`);
-          const toggle = page.getByRole('button', { name: 'Open navigatie' });
-          const summary = page.locator('summary[aria-label="Open navigatie"]');
-          const opener = await toggle.count() ? toggle : summary;
+        }
+        if (width <= 1024) {
+          const opener = page.getByRole('button', { name: 'Open navigatie' });
           const r = await opener.boundingBox();
           check(r && r.width >= 44 && r.height >= 44, `${engine} ${width}: menu target smaller than 44px`);
           await opener.click();
@@ -76,13 +77,28 @@ try {
           check(bounds && bounds.y + bounds.height <= height + 1, `${engine} ${width}: menu outside viewport height`);
           if (width === 390) await page.screenshot({ path: `mobile-results/${engine}-${width}-menu.png` });
           await page.keyboard.press('Escape');
+          await page.waitForTimeout(80);
           check(!(await nav.isVisible()), `${engine} ${width}: Escape does not dismiss menu`);
-          // Dismiss an old native-details menu during baseline audits.
-          await page.evaluate(() => document.querySelectorAll('details[open]').forEach(el => el.removeAttribute('open')));
+          check(await page.locator('summary').evaluate(el => document.activeElement === el), `${engine} ${width}: Escape loses keyboard focus`);
+          await opener.click();
+          await nav.getByRole('link', { name: 'Artikelen', exact: true }).click();
+          await page.waitForTimeout(80);
+          check(!(await nav.isVisible()), `${engine} ${width}: menu stays open after selecting an article section`);
+          check(new URL(page.url()).hash === '#artikelen', `${engine} ${width}: article navigation does not reach the section`);
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await opener.click();
+          await page.locator('header').getByRole('link', { name: 'AMPARIS homepage' }).click();
+          await page.waitForTimeout(80);
+          check(!(await nav.isVisible()), `${engine} ${width}: outside click does not dismiss menu`);
         }
         if ([390, 768, 1440].includes(width)) {
+          await page.locator('#artikelen').scrollIntoViewIfNeeded();
+          await page.waitForTimeout(250);
+          await page.evaluate(() => window.scrollTo(0, 0));
           await page.screenshot({ path: `mobile-results/${engine}-${width}-full.png`, fullPage: true });
           await page.locator('#artikelen').screenshot({ path: `mobile-results/${engine}-${width}-articles.png` });
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await page.screenshot({ path: `mobile-results/${engine}-${width}-top.png` });
         }
         await page.close();
       }
@@ -95,4 +111,4 @@ try {
   await fs.writeFile('mobile-results/server.log', serverLog);
 }
 console.log(JSON.stringify({ viewports: results.length, failures }, null, 2));
-if (process.env.MOBILE_AUDIT_ONLY !== '1') assert.equal(failures.length, 0, 'Responsive checks failed; see mobile-results/layout.json');
+assert.equal(failures.length, 0, 'Responsive checks failed; see mobile-results/layout.json');

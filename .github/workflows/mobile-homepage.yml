@@ -13,7 +13,6 @@ jobs:
     timeout-minutes: 12
     env:
       NEXT_TELEMETRY_DISABLED: '1'
-      MOBILE_AUDIT_ONLY: '1'
     steps:
       - uses: actions/checkout@v4
         with:

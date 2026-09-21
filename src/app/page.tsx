@@ -1,9 +1,9 @@
 import { AveraStories, AveraHero } from "@/components/publishing/AveraFeed";
+import MobileMenu from "@/components/homepage/MobileMenu";
 import HomepageArticles from "@/components/publishing/HomepageArticles";
 import {
   ArrowRight,
   LockKeyhole,
-  Menu,
   ShieldCheck,
 } from "lucide-react";
 import { getHomepageContent } from "@/lib/homepage";
@@ -57,17 +57,7 @@ export default async function Home() {
             <LockKeyhole aria-hidden="true" size={14} />
             <span>Anoniem deelnemen</span>
           </a>
-          <details className={c("mobileMenu")}>
-            <summary aria-label="Open navigatie"><Menu aria-hidden="true" size={22} /></summary>
-            <nav aria-label="Mobiele navigatie">
-              <a href="#stories">Stories</a>
-              <a href="#voices">Voices</a>
-              <a href="#investigations">Investigations</a>
-              <a href="#data">Data</a>
-              <a href="#world">World</a>
-              <a href="#about">About</a>
-            </nav>
-          </details>
+          <MobileMenu />
         </div>
       </header>
 
@@ -155,7 +145,7 @@ export default async function Home() {
               <div className={c("miniBars wineBars")} aria-label="Oplopende bordeauxrode datapunten"><i /><i /><i /><i /><i /><i /></div>
             </div>
             <div className={c("dataPoint")}>
-              <strong>62%</strong><span>voelde zich niet<br />gehoord</span>
+              <strong>62%</strong><span>voelde zich niet<br/>gehoord</span>
               <div className={c("miniBars lightBars")} aria-label="Oplopende rode datapunten"><i /><i /><i /><i /><i /><i /></div>
             </div>
             <div className={c("dataPoint")}>

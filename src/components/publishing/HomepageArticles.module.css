@@ -72,13 +72,29 @@
 .notice { padding-block: 24px; border-block: 1px solid var(--soft-line); font-size: 13px; line-height: 1.6; }
 
 @media (max-width: 850px) {
-  .grid { grid-template-columns: 1fr; }
+  .section { padding-block: 32px 40px; scroll-margin-top: 84px; }
+  .kicker { font-size: 11px; line-height: 1.5; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
   .card:nth-child(even) { border-left: 0; }
   .card + .card { border-top: 1px solid var(--soft-line); }
-  .cardLink { grid-template-columns: minmax(100px, 0.7fr) minmax(0, 1.3fr); padding: 24px 0; }
+  .cardLink {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    min-height: 0;
+    gap: 22px;
+    padding: 24px 0;
+  }
+  .image { min-height: 0; height: 100%; }
+  .chapter { font-size: 12px; line-height: 1.5; }
+  .copy h3 { font-size: clamp(26px, 4vw, 32px); line-height: 1.15; }
+  .copy p { font-size: 15px; line-height: 1.65; }
+  .readLink { min-height: 44px; font-size: 14px; }
+  .footer { gap: 8px 24px; margin-top: 12px; }
+  .footer a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; line-height: 1.5; }
 }
 
-@media (max-width: 480px) {
-  .cardLink { grid-template-columns: 1fr; gap: 20px; }
+@media (max-width: 560px) {
+  .section { scroll-margin-top: 76px; }
+  .cardLink { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .image { height: auto; min-height: 0; aspect-ratio: 16 / 9; }
+  .footer { flex-direction: column; align-items: flex-start; }
 }
