@@ -66,9 +66,12 @@ try {
           check(layout.heroImage.x >= -1, `${engine} ${width}: mobile hero image still has desktop negative margin`);
         }
         if (width <= 1024) {
-          const opener = page.getByRole('button', { name: 'Open navigatie' });
+          // Native summary roles differ between browser accessibility trees.
+          // Its controls relationship remains stable while its label changes on opening.
+          const opener = page.locator('summary[aria-controls="mobile-homepage-navigation"]');
           const r = await opener.boundingBox();
           check(r && r.width >= 44 && r.height >= 44, `${engine} ${width}: menu target smaller than 44px`);
+          check(await opener.getAttribute('aria-label') === 'Open navigatie', `${engine} ${width}: menu has no opening label`);
           await opener.click();
           const nav = page.getByRole('navigation', { name: 'Mobiele navigatie' });
           check(await nav.isVisible(), `${engine} ${width}: menu not visible`);
@@ -79,7 +82,7 @@ try {
           await page.keyboard.press('Escape');
           await page.waitForTimeout(80);
           check(!(await nav.isVisible()), `${engine} ${width}: Escape does not dismiss menu`);
-          check(await page.locator('summary').evaluate(el => document.activeElement === el), `${engine} ${width}: Escape loses keyboard focus`);
+          check(await opener.evaluate(el => document.activeElement === el), `${engine} ${width}: Escape loses keyboard focus`);
           await opener.click();
           await nav.getByRole('link', { name: 'Artikelen', exact: true }).click();
           await page.waitForTimeout(80);
@@ -104,6 +107,8 @@ try {
       }
     } finally { await browser.close(); }
   }
+} catch (error) {
+  failures.push(error instanceof Error ? error.stack || error.message : String(error));
 } finally {
   server.kill('SIGTERM');
   fixture.close();
